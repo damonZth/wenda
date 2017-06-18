@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    #parse("header.html")
+</head>
+<body>
+    <pre>
+        #*
+        * 块注释！！！
+        *#
+        $!{value}
+        $!{value1} ## 如果不存在，则强制为空
+        ${value2}  ## 没有！，当成文本解析
+
+        colors:$!{colors}
+
+        #foreach($color in $colors)
+            this is Color $!{foreach.index} : $color,$!{foreach.count}
+        #end
+
+        #foreach($key in $map.keySet())
+            Number: $key,Value: $map.get(key)
+        #end
+
+        #foreach($kv in $map.entrySet())
+            Number: $kv.key , Value: $kv.value
+        #end
+
+        User: $!{user.name}, $!{user.description}
+        $!{user.getDescription()}
+        <!--定义一个宏-->
+        #macro (render_color,$index,$color)
+            Color Render Macro $index,$color
+        #end
+
+        <!--应用宏-->
+        #foreach($color in $colors)
+            #render_color($foreach.index,$color)
+        #end
+
+        #set($hello = "hello")
+        #set($helloworld = "$!{hello} world")
+
+        $!hello
+        $!helloworld
+        <!--Parse: #parse("header.html")    #*parse会做模板解析*#-->
+        <!--Include: #include("header.html")  #*include不会做模板解析*#-->
+
+    </pre>
+</body>
+</html>
