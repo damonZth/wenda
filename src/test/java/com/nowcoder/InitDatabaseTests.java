@@ -1,7 +1,10 @@
 package com.nowcoder;
 
+import com.nowcoder.dao.QuestionDAO;
 import com.nowcoder.dao.UserDAO;
+import com.nowcoder.model.Question;
 import com.nowcoder.model.User;
+import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +12,7 @@ import org.springframework.boot.test.SpringApplicationConfiguration;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Date;
 import java.util.Random;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -18,6 +22,8 @@ public class InitDatabaseTests {
 
 	@Autowired
 	UserDAO userDAO;
+	@Autowired
+	QuestionDAO questionDAO;
 
 	@Test
 	public void initDatabase() {
@@ -29,8 +35,28 @@ public class InitDatabaseTests {
 			user.setPassword("");
 			user.setSalt("");
 			userDAO.addUser(user);
+
+			user.setPassword("xxxxx");
+			userDAO.updatePassword(user);
+
+			Question question = new Question();
+			question.setCommentCount(i);
+			Date date = new Date();
+			date.setTime(date.getTime() + 1000*3600*i);
+			question.setCreatedDate(date);
+			question.setUserId(i+1);
+			question.setTitle(String.format("TITLE{%d}",i));
+			question.setContent(String.format("提问啊 ？？？ Content %d",i));
+
+			questionDAO.addQuestion(question);
 		}
 
+		Assert.assertEquals("xxxxx",userDAO.selectById(1).getPassword());
+		userDAO.deleteById(1);
+		Assert.assertNull(userDAO.selectById(1));
+
+
+		System.out.print(questionDAO.selectLatestQuestions(0,0,10));
 	}
 
 }
