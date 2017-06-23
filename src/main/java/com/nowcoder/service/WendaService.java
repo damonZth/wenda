@@ -1,15 +1,13 @@
 package com.nowcoder.service;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by Damon on 2017/6/18.
- *
+ * Created by nowcoder on 2016/7/10.
  */
 @Service
 public class WendaService {
-    public String getMessage(int userId){
-        return "hello Message:" + String.valueOf(userId);
+    public String getMessage(int userId) {
+        return "Hello Message:" + String.valueOf(userId);
     }
 }

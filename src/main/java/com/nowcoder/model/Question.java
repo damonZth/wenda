@@ -3,7 +3,7 @@ package com.nowcoder.model;
 import java.util.Date;
 
 /**
- * Created by Damon on 2017/6/21.
+ * Created by Damon on 2017/6/23.
  */
 public class Question {
     private int id;
@@ -60,8 +60,4 @@ public class Question {
     public void setCommentCount(int commentCount) {
         this.commentCount = commentCount;
     }
-
-
-
-
 }

@@ -1,52 +1,57 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-
-    #parse("header.html")
-</head>
+<html>
 <body>
-    <pre>
-        #*
-        * 块注释！！！
-        *#
-        $!{value}
-        $!{value1} ## 如果不存在，则强制为空
-        ${value2}  ## 没有！，当成文本解析
+<pre>
+    #*
+    你看不到我~~~~
+    *#
+    $!{value1}
+    $!{value2} ## 如果不存在，强制为空
+    ${value3}
 
-        colors:$!{colors}
+    colors: $!{colors}
 
-        #foreach($color in $colors)
-            this is Color $!{foreach.index} : $color,$!{foreach.count}
-        #end
+    #foreach($color in $colors)
+        This is Color $!{foreach.index}: $color, $!{foreach.count}
+    #end
 
-        #foreach($key in $map.keySet())
-            Number: $key,Value: $map.get(key)
-        #end
+    #foreach($key in $map.keySet())
+        Number: $key, Value: $map.get($key)
+    #end
 
-        #foreach($kv in $map.entrySet())
-            Number: $kv.key , Value: $kv.value
-        #end
+    #foreach($kv in $map.entrySet())
+        Number: $kv.key, Value: $kv.value
+    #end
 
-        User: $!{user.name}, $!{user.description}
-        $!{user.getDescription()}
-        <!--定义一个宏-->
-        #macro (render_color,$index,$color)
-            Color Render Macro $index,$color
-        #end
+    User:  $!{user.name}
+    $!{user.description}
+    $!{user.getDescription()}
 
-        <!--应用宏-->
-        #foreach($color in $colors)
-            #render_color($foreach.index,$color)
-        #end
+    #set($title = "nowcoder_title")
+    Title: $!{title}
 
-        #set($hello = "hello")
-        #set($helloworld = "$!{hello} world")
 
-        $!hello
-        $!helloworld
-        <!--Parse: #parse("header.html")    #*parse会做模板解析*#-->
-        <!--Include: #include("header.html")  #*include不会做模板解析*#-->
+    Parse: #parse("header.html")
+    Include: #include("header.html")
 
-    </pre>
+    #macro (render_color, $index, $color)
+        Color Render Macro $index, $color
+    #end
+
+    #foreach($color in $colors)
+        #render_color($foreach.index, $color)
+    #end
+
+    #set($hello = "hello")
+    #set($helloworld1 = "$!{hello} world")
+    $!hello
+    $helloworld1
+    #set($helloworld2 = '$!{hello} world')
+    $helloworld2
+
+
+
+
+
+</pre>
 </body>
 </html>
