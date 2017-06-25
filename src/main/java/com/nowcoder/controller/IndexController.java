@@ -29,12 +29,12 @@ public class IndexController {
     @Autowired
     QuestionService questionService;
 
-//    @RequestMapping(path = {"/user/{userId}"},method = RequestMethod.GET)
-//    public String userIndex(Model model,
-//                            @Param("userId") int userId){
-//        model.addAttribute("vos",getQuestions(userId, 0, 10));
-//        return "index";
-//    }
+    @RequestMapping(path = {"/user/{userId}"},method = RequestMethod.GET)
+    public String userIndex(Model model,
+                            @Param("userId") int userId){
+        model.addAttribute("vos",getQuestions(userId, 0, 10));
+        return "index";
+    }
 
 
 
