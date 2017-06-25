@@ -1,7 +1,7 @@
 package com.nowcoder.model;
 
 /**
- * Created by Damon on 2017/6/23.
+ * Created by nowcoder on 2016/7/10.
  */
 public class User {
     private int id;
@@ -10,16 +10,14 @@ public class User {
     private String salt;
     private String headUrl;
 
-    public User(){
-        //....
-    }
+    public User() {
 
-    public int getId() {
-        return id;
     }
-
-    public void setId(int id) {
-        this.id = id;
+    public User(String name) {
+        this.name = name;
+        this.password = "";
+        this.salt = "";
+        this.headUrl = "";
     }
 
     public String getName() {
@@ -52,5 +50,13 @@ public class User {
 
     public void setHeadUrl(String headUrl) {
         this.headUrl = headUrl;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
