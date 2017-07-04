@@ -29,6 +29,13 @@ public class UserService {
     @Autowired
     private LoginTicketDAO loginTicketDao;
 
+    /**
+     * 登入账号
+     * 对用户输入的账号、密码进行检验并有一个map来存储判断的输出
+     * @param username 输入账号
+     * @param password 输入密码
+     * @return
+     */
     public Map<String, String> login(String username, String password){
         Map<String, String> map = new HashMap<>();
         if(org.apache.commons.lang.StringUtils.isBlank(username)){
@@ -36,47 +43,42 @@ public class UserService {
             map.put("msg", "用户名不能为空！");
             return map;
         }
-
         if(org.apache.commons.lang.StringUtils.isBlank(password)){
             //判断密码是否为空，如果为空，则提示密码不能不空
             map.put("msg", "密码不能为空！");
             return map;
         }
-
         User user = userDao.selectByName(username);
         if(user == null){
-            //判断用户名是否已被注册
+            //判断用户名是否存在
             map.put("msg", "用户名不存在");
             return map;
         }
-
-        if(WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())){
+        if(!WendaUtil.MD5(password + user.getSalt()).equals(user.getPassword())){
             //验证密码
             map.put("msg","密码错误");
             return map;
         }
-
         String ticket = addLoginTicket(user.getId());
         map.put("ticket",ticket);
-
         return map;
     }
 
-    public String addLoginTicket(int userId){
-        LoginTicket loginTicket = new LoginTicket();
-        loginTicket.setUserId(userId);
-        Date now = new Date();
-        now.setTime(3600 * 24 * 10 + now.getTime());
-        loginTicket.setExpired(now);
-        loginTicket.setStatus(0);
-        loginTicket.setTicket(UUID.randomUUID().toString().replaceAll("-",""));
-        loginTicketDao.addTicket(loginTicket);
-        return loginTicket.getTicket();
+    private String addLoginTicket(int userId){
+        LoginTicket ticket = new LoginTicket();
+        ticket.setUserId(userId);
+        Date date = new Date();
+        date.setTime(3600 * 24 * 10 + date.getTime());
+        ticket.setExpired(date);
+        ticket.setStatus(0);
+        ticket.setTicket(UUID.randomUUID().toString().replaceAll("-",""));
+        loginTicketDao.addTicket(ticket);
+        return ticket.getTicket();
     }
 
 
     /**
-     * 注册用户
+     * 注册账号
      * @param username 输入用户名
      * @param password 输入用户密码
      * @return
@@ -88,20 +90,17 @@ public class UserService {
             map.put("msg", "用户名不能为空！");
             return map;
         }
-
         if(org.apache.commons.lang.StringUtils.isBlank(password)){
             //判断密码是否为空，如果为空，则提示密码不能不空
             map.put("msg", "密码不能为空！");
             return map;
         }
-
         User user = userDao.selectByName(username);
         if(user != null){
             //判断用户名是否已被注册
             map.put("msg", "该用户名已被注册！");
             return map;
         }
-
         //密码强度
         user = new User();
         user.setName(username);
@@ -118,4 +117,9 @@ public class UserService {
     public User getUser(int id){
         return userDao.selectById(id);
     }
+
+    public void logout(String ticket){
+        loginTicketDao.updateStatus(ticket,1);
+    }
+
 }

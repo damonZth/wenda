@@ -1,14 +1,12 @@
 package com.nowcoder.dao;
 
 import com.nowcoder.model.LoginTicket;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Param;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 
 /**
  * Created by Damon on 2017/7/4.
  */
+@Mapper
 public interface LoginTicketDAO {
     String TABLE_NAME = " login_ticket ";
     String INSERT_FIELDS = "user_id, expired, status, ticket";
