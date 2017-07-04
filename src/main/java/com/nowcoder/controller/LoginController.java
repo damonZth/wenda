@@ -1,17 +1,18 @@
 package com.nowcoder.controller;
 
 import com.nowcoder.service.UserService;
-import com.nowcoder.util.WendaUtil;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
 /**
@@ -24,15 +25,29 @@ public class LoginController {
     @Autowired
     UserService userService;
 
+    /**
+     * 在页面注册登入
+     * @param model
+     * @param username
+     * @param password
+     * @return
+     */
     @RequestMapping(path = {"/reg/"}, method = {RequestMethod.POST})
-    public String reg(Model model, @RequestParam("username") String username, @RequestParam("password") String password) {
+    public String reg(Model model,
+                      @RequestParam("username") String username,
+                      @RequestParam("password") String password,
+                      HttpServletResponse response) {
         try {
             Map<String, String> map = userService.register(username, password);
-            if (map.containsKey("msg")) {
+            if(map.containsKey("ticket")){
+                Cookie cookie = new Cookie("ticket", map.get("ticket"));
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }else{
                 model.addAttribute("msg", map.get("msg"));
                 return "login";
             }
-            return "redirect:/";
+            return "redirect:/";//如果注册成功则跳转到首页
         } catch (Exception e) {
             logger.error("注册异常", e.getMessage());
             return "login";
@@ -44,12 +59,39 @@ public class LoginController {
         return "login";
     }
 
-    @RequestMapping(path = {"/reg/"}, method = {RequestMethod.POST})
+
+    /**
+     * 登入
+     * @param model
+     * @param username
+     * @param password
+     * @param rememberme
+     * @param response
+     * @return
+     */
+    @RequestMapping(path = {"/login/"}, method = {RequestMethod.POST})
     public String login(Model model,
                         @RequestParam("username") String username,
                         @RequestParam("password") String password,
-                        @RequestParam(value = "rememberme", defaultValue = "false") boolean rememberme){
+                        @RequestParam(value = "rememberme", defaultValue = "false") boolean rememberme,
+                        HttpServletResponse response){
+        try {
+            Map<String, String> map = userService.login(username, password);
+            if(map.containsKey("ticket")){
+                Cookie cookie = new Cookie("ticket", map.get("ticket"));
+                cookie.setPath("/");
+                response.addCookie(cookie);
+                return "redirect:/";//如果注册成功则跳转到首页
+            }else{
+                model.addAttribute("msg", map.get("msg"));
+                return "login";
+            }
 
+        } catch (Exception e) {
+            logger.error("注册异常", e.getMessage());
+            return "login";
+        }
     }
+
 
 }

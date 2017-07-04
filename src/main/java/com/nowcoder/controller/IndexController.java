@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Created by Damon on 2017/6/23.
  */
-@Controller
+//@Controller
 public class IndexController {
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
