@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +20,7 @@ import java.util.List;
 /**
  * Created by Damon on 2017/6/23.
  */
-//@Controller
+@Controller
 public class IndexController {
     private static final Logger logger = LoggerFactory.getLogger(IndexController.class);
 
@@ -29,19 +30,22 @@ public class IndexController {
     @Autowired
     QuestionService questionService;
 
-    @RequestMapping(path = {"/user/{userId}"},method = RequestMethod.GET)
+    @RequestMapping(path = {"/user/{userId}"},method = {RequestMethod.GET,RequestMethod.POST})
     public String userIndex(Model model,
                             @Param("userId") int userId){
         model.addAttribute("vos",getQuestions(userId, 0, 10));
         return "index";
     }
 
-
-
+//    @RequestMapping(path = {"/", "/index"}, method = {RequestMethod.GET, RequestMethod.POST})
+//    public String index(Model model,
+//                        @RequestParam(value = "pop", defaultValue = "0") int pop) {
+//        model.addAttribute("vos", getQuestions(0, 0, 10));
+//        return "index";
+//    }
 
     @RequestMapping(path = {"/","/index"},method = RequestMethod.GET)
     public String index(Model model){
-
         model.addAttribute("vos", getQuestions(0, 0, 10));
         return "index";
     }

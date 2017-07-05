@@ -1,6 +1,5 @@
 package com.nowcoder.service;
 
-import antlr.StringUtils;
 import com.nowcoder.dao.LoginTicketDAO;
 import com.nowcoder.dao.UserDAO;
 import com.nowcoder.model.LoginTicket;
@@ -118,6 +117,7 @@ public class UserService {
         return userDao.selectById(id);
     }
 
+    //退出登入，使ticket失效
     public void logout(String ticket){
         loginTicketDao.updateStatus(ticket,1);
     }
